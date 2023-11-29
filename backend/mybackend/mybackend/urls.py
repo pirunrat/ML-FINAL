@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import landing_page, product_normal, product_recommend,product_recommend_register,product_rated_recommend,Register,Update_Rated_Recommend,make_recommendations
+from .views import landing_page, product_normal, product_recommend,product_recommend_register,product_rated_recommend,Register,Update_Rated_Recommend
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,5 @@ urlpatterns = [
     path('product_rated_recommend',product_rated_recommend,name='product_rated_recommend'),
     path('Register',Register,name='Register'),
     path('Update_Rated_Recommend',Update_Rated_Recommend,name='Update_Rated_Recommend'),
-    path('make_recommendations',make_recommendations,name='make_recommendations')
+    
 ]

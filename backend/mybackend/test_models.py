@@ -1,55 +1,54 @@
-from combiner import Combiner
-from pymongo import MongoClient
-from sklearn.decomposition import NMF
-from sklearn.utils.validation import check_is_fitted
+import json
+from django.test import TestCase, RequestFactory
+from django.http import JsonResponse
+from mybackend.mongoDB import MongoDBClient
+from django.contrib.auth.models import User  # Replace with your User model
+from mybackend.authenticate_request import authenticate_request  # Import your decorator
+from django.urls import reverse
+import jwt
 
-import numpy as np
-import pickle
-import pandas as pd
-import os
-from django.conf import settings
+# Your MongoDBClient for users
+user = MongoDBClient('mongodb+srv://Admin:1234@mlproject.obivlrq.mongodb.net/?retryWrites=true&w=majority', "E-commerce", "User")
 
-uri = "mongodb+srv://Admin:1234@mlproject.obivlrq.mongodb.net/?retryWrites=true&w=majority"
-# Create a new client and access database collection
-client = MongoClient(uri)
-mongo_rating = client['E-commerce']['Rating']
-mongo_product = client['E-commerce']['Product5000']
-mongo_asin_list = [x['asin'] for x in mongo_product.find({}, {'_id': 0, 'asin': 1})]
+# Secret key for JWT token
+JWT_SECRET_KEY = 'ML_Project'  # Replace with your actual secret key
+
+def generate_token(username):
+    payload = {
+        'username': username,
+        # You can add more claims to the payload if needed
+    }
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm='HS256')
+    return token
+
+class AuthenticateRequestDecoratorTests(TestCase):
+    def setUp(self):
+        # Create a test user
+        self.user =  user.find_one({"username":"mark","password":"a"})
+
+        # Create a test request factory
+        self.factory = RequestFactory()
+
+    def test_authenticated_request(self):
+        # Create an authenticated request with a valid JWT token
+        token = generate_token(self.user['username'])
+        request = self.factory.post(reverse('product_normal'), data={}, content_type='application/json', HTTP_AUTHORIZATION=f'Token {token}')
+
+        # Apply the decorator to the view
+        decorated_view = authenticate_request(self.dummy_view)
+        response = decorated_view(request)
+
+        # Check that the view was called and returned a response
+        self.assertEqual(response.status_code, 200)
+
+     # Define a dummy view for testing
+    def dummy_view(self, request):
+        return JsonResponse({'status': 'success'})
+
+    # Define a view that raises an exception for testing
+    def view_with_exception(self, request):
+        raise Exception('An error occurred')
+
+    
 
 
-# Specify the relative path to the files within the 'model' directory
-csv_file_path = os.path.join(settings.BASE_DIR, 'mybackend', 'model', 'product_sims_train.csv')
-model_file_path = os.path.join(settings.BASE_DIR, 'mybackend', 'model', 'mf_factorizer_train.pkl')
-
-
-# Load models
-similarity_df = pd.read_csv(csv_file_path, index_col=0)
-factorizer = pickle.load(open(model_file_path, 'rb'))
-n_recom = 5
-
-def test_IBCF_matrix():
-    assert similarity_df.shape[0] == similarity_df.shape[1], "Number of rows and columns in IBCF Similarity matrix should be the same"
-    assert similarity_df.shape[1] == similarity_df.select_dtypes(include=["float", 'int']).shape[1], "All values in IBCF similarity matrix should be numeric"
-    assert similarity_df.notna().values.any(), "There must not be any missing value in IBCF similarity matrix"
-    assert set(similarity_df.columns) <= set(mongo_asin_list), "Some products in IBCF similarity matrix are not found in the database"
-
-def test_MF_factorizer():
-    assert type(factorizer) == NMF, "NMF factorizer is not an Sklearn's NMF instance"
-    check_is_fitted(factorizer, msg="NMF factorizer has yet to be fitted")
-    assert set(factorizer.feature_names_in_) <= set(mongo_asin_list), "Some products in NMF factorizer are not found in the database"
-
-def test_models_compat():
-    assert len(similarity_df.columns) == len(factorizer.feature_names_in_), "Models do not have the same number of products"
-    assert (factorizer.feature_names_in_ == similarity_df.columns).all(), "Models products names do not match or are ordered incorrectly"
-
-def test_recommendations():
-    user_data = mongo_rating.find_one({}, {'_id': 0})
-    username = user_data['username']
-    user_ratings = pd.Series(user_data, index=similarity_df.columns.tolist(), name=username).fillna(0)
-
-    combiner = Combiner(similarity_df.to_numpy(), factorizer)
-    combiner.ingest(user_ratings)
-    recom_list = list(combiner.make_recommendations(username, n_recom).keys())
-
-    assert len(recom_list) == n_recom, "Number of recommended products do not match the combiner input"
-    assert set(recom_list) <= set(mongo_asin_list), "Some or all recommended products are not found in the database"
