@@ -24,7 +24,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Testing
-        run: docker-compose exec -T backend/mybackend python manage.py test -v 2
+        run: docker-compose exec -T backend python manage.py test -v 2
 
   push:
     needs: test
