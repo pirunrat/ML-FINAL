@@ -43,4 +43,6 @@ services:
     volumes:
       - ./ML_model:/root/ML_model
       - ./.vscode-server:/root/.vscode-server
+    mem_limit: 2g  # Limit memory to 1GB
+    cpus: 1  # Limit CPU usage to 1 core
       
