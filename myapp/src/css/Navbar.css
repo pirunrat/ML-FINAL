@@ -1,0 +1,40 @@
+.navbar {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    background-color: #333;
+    overflow: visible;
+    position: fixed;
+    top: 0;
+    left:0;
+    width: 100%;
+    height: 60px;
+    z-index: 1000;
+}
+
+.navbar a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.navbar {
+    display: flex;
+    gap: 15px;
+  }
+  .navbar > div {
+    position: relative;
+}
+.navbar a {
+    display: inline-block;
+}
+.navbar-item {
+    position: relative;  /* To be the parent of the absolutely positioned dropdown */
+    display: inline-block;  /* Keeps it inline with other navbar items */
+}

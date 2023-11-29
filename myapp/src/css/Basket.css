@@ -1,0 +1,116 @@
+/* Basket container */
+.main-basket-content {
+  display: flex;
+  flex-direction: column;
+  width: 900px;
+  height: auto;
+  overflow-y: auto;
+  margin: 80px auto;
+  padding: 40px;
+  background-color: #f9f7f4;  /* Light creamy background for luxury feel */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);  /* More pronounced shadow */
+  border-radius: 16px;
+  scrollbar-width: thin;  /* You can also use 'auto' or 'none' */
+  scrollbar-color: #c0a680 #f9f7f4;  /* thumb and track color */
+}
+.main-basket-content::-webkit-scrollbar {
+  width: 12px;  /* Adjust width to preference */
+  background-color: #f9f7f4;  /* Light creamy background from your design */
+}
+.main-basket-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #c0a680, #a28c58);  /* Gold-ish gradient */
+  border-radius: 6px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);  /* Gives the thumb a bit of depth */
+}
+.main-basket-content::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #f9f7f4;  /* Light creamy background from your design */
+  border-radius: 6px;
+}
+.main-basket-content::-webkit-scrollbar-thumb:hover {
+  background: #a28c58;  /* Darker gold for hover */
+}
+
+.main-basket-content h2 {
+  font-size: 2em;
+  margin-bottom: 40px;
+  border-bottom: 3px solid #c0a680;  /* Using a gold-ish color */
+  padding-bottom: 15px;
+  color: #534739;  /* Dark brown for titles */
+}
+
+.main-basket-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+}
+
+.main-basket-content li {
+  flex: 1 1 auto; /* Makes each item take up an equal amount of space within the card */
+  margin: 5px 0; /* Adjust according to your design */
+  padding: 5px 0; 
+  border-bottom: 1px solid #eee;
+  font-size: 1.2em;
+  color: #534739;
+}
+
+.main-basket-content li:last-child {
+  border-bottom: none;
+}
+
+.main-basket-content button {
+  background-color: #c0a680;  /* Gold-ish button */
+  color: #f9f7f4;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 30px;
+  font-size: 1.1em;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.main-basket-content button:hover {
+  background-color: #a28c58;  /* Darker gold for hover */
+  transform: scale(1.05);  /* Slight scale on hover for interactivity */
+}
+
+.main-background-basket {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 0px;
+  margin-bottom: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  /* Hiding the scrollbar */
+  scrollbar-width: none;
+}
+
+.main-background-basket::-webkit-scrollbar {
+  display: none;
+
+}
+/* Basket Card */
+.basket-card {
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.basket-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #c0a680;
+  padding-bottom: 10px;
+}
+.buy-button{
+  position: relative;
+  right:0;
+  width:100px;
+  height:50px;
+}

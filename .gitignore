@@ -1,0 +1,4 @@
+.vscode-server/
+myapp/.vscode-server/*
+ML_model/model/*.csv
+myapp/node_modules/

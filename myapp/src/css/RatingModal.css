@@ -1,0 +1,109 @@
+/* Prevents scrolling when the modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* The modal overlay remains unchanged */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures the modal stays on top */
+}
+
+/* The main modal container */
+.rating-modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    transform: scale(1.05); /* Slight scale for focus */
+    transition: transform 0.3s; /* Smooth transition for scaling */
+}
+
+/* Style for the buttons inside the modal */
+.rating-modal button {
+    margin: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #c0a680;
+    color: white;
+    cursor: pointer; /* Change cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Hover state for buttons */
+.rating-modal button:hover {
+    background-color: #9f8659;
+}
+
+/* Active state for buttons (if needed) */
+.rating-modal button.active {
+    background-color: #75593c;
+}
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+/* Adjusted modal style */
+.rating-modal {
+    position: relative; /* Added to position the close button */
+    background-color: #fff;
+    padding: 30px; /* Increase padding */
+    border-radius: 5px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    width: 400px; /* Adjust width */
+    text-align: center; /* Center the content */
+}
+
+.rating-modal h3 {
+    margin-bottom: 20px;
+}
+
+.rating-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.rating-modal button {
+    margin: 0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #c0a680;
+    color: white;
+    cursor: pointer;
+    font-size: 18px; /* Increase font-size */
+}
+
+.rating-modal button.active {
+    background-color: #75593c;
+}
+/* In RatingModal.css */
+.active-rating {
+    background-color: #007BFF;
+    color: white;
+}
+
+.feedback-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+}

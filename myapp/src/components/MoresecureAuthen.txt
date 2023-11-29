@@ -1,0 +1,60 @@
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+
+const AuthContext = createContext();
+
+function useAuth() {
+    return useContext(AuthContext);
+}
+
+function ProtectedRoute({ children }) {
+    let auth = useAuth();
+    let navigate = useNavigate();
+    if (!auth.isAuthenticated) {
+        // Optionally store location to redirect back to
+        navigate("/login");
+        return null;
+    }
+    return children;
+}
+
+function App() {
+    const [authenticated, setAuthenticated] = useState(false);
+
+    useEffect(() => {
+        // Fetch the backend to verify if the token is valid, rather than relying on client-side checks
+        fetch("/api/verify-token")
+            .then(response => {
+                if (response.ok) {
+                    setAuthenticated(true);
+                } else {
+                    setAuthenticated(false);
+                }
+            });
+    }, []);
+
+    const authContextValue = {
+        isAuthenticated: authenticated,
+        login: () => setAuthenticated(true),
+        logout: () => setAuthenticated(false)
+    };
+
+    return (
+        <AuthContext.Provider value={authContextValue}>
+            <div className='App'>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <ProtectedRoute path="/Basket" element={<Basket />} />
+                        <ProtectedRoute path="/Contact" element={<Contact />} />
+                        <ProtectedRoute path="/Product" element={<Product />} />
+                        <Route path="/login" element={<Login />} />
+                    </Routes>
+                </Router>
+                <Footer />
+            </div>
+        </AuthContext.Provider>
+    );
+}
+
+export default App;
